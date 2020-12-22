@@ -34,11 +34,14 @@ var _ = Describe("group 1", func() {
 		It("should test 1.2", func() {
 		})
 	})
-	Context("group 2", func() {
+	Context("context 2", func() {
 		It("should test 2.1", func() {
+		})
+		It(fmt.Sprintf("should test %d.%d", 2, 2), func() {
 		})
 	})
 })
+
 `
 	filename := "src.go"
 
@@ -74,27 +77,27 @@ var _ = Describe("group 1", func() {
 	stack := []*GinkgoNode{&root}
 
 	ispr.Nodes([]ast.Node{(*ast.CallExpr)(nil)}, func(n ast.Node, push bool) bool {
-		if push {
-			if c, ok := n.(*ast.CallExpr); ok {
-				if i, ok := c.Fun.(*ast.Ident); ok {
-					child := GinkgoNode{
-						GinkgoMetadata: GinkgoMetadata{
-							SpecType:     i.Name,
-							CodeLocation: fset.Position(i.Pos()).String(),
-						},
-					}
-					if len(c.Args) > 0 {
-						child.Text = "[could not determine]"
-						if text, ok := c.Args[0].(*ast.BasicLit); ok {
-							unquoted, err := strconv.Unquote(text.Value)
-							if err != nil {
-								panic(err)
-							}
-							child.Text = unquoted
+		if c, ok := n.(*ast.CallExpr); ok {
+			if i, ok := c.Fun.(*ast.Ident); ok {
+				// TODO return immediately if identifer is not a ginkgo spec/container
+				child := GinkgoNode{
+					GinkgoMetadata: GinkgoMetadata{
+						SpecType:     i.Name,
+						CodeLocation: fset.Position(i.Pos()).String(),
+					},
+				}
+				if len(c.Args) > 0 {
+					child.Text = "[could not determine]"
+					if text, ok := c.Args[0].(*ast.BasicLit); ok {
+						unquoted, err := strconv.Unquote(text.Value)
+						if err != nil {
+							panic(err)
 						}
-
+						child.Text = unquoted
 					}
+				}
 
+				if push {
 					// add to parent
 					parent := stack[len(stack)-1]
 					parent.Children = append(parent.Children, &child)
@@ -103,10 +106,11 @@ var _ = Describe("group 1", func() {
 					stack = append(stack, &child)
 					return true
 				}
+				// pop off stack
+				stack = stack[0 : len(stack)-1]
+				return true
 			}
 		}
-		// pop off stack
-		stack = stack[0 : len(stack)-1]
 		return true
 	})
 
