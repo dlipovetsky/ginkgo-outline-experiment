@@ -51,38 +51,46 @@ var _ = Describe("group 1", func() {
 
 	ispr := inspector.New([]*ast.File{f})
 
-	ginkgoNodes := []ast.Node{
-		(*ast.CallExpr)(nil),
+	type GinkgoMetadata struct {
+		SpecType     string
+		Text         string
+		CodeLocation string
 	}
-	ispr.Nodes(ginkgoNodes, func(n ast.Node, push bool) bool {
-		if c, ok := n.(*ast.CallExpr); ok {
-			if i, ok := c.Fun.(*ast.Ident); ok {
-				fmt.Println(i.Name)
+
+	type GinkgoNode struct {
+		GinkgoMetadata
+		Children []*GinkgoNode
+	}
+
+	root := GinkgoNode{
+		GinkgoMetadata: GinkgoMetadata{
+			SpecType: "root",
+		},
+	}
+
+	stack := []*GinkgoNode{&root}
+
+	ispr.Nodes([]ast.Node{(*ast.CallExpr)(nil)}, func(n ast.Node, push bool) bool {
+		if push {
+			if c, ok := n.(*ast.CallExpr); ok {
+				if i, ok := c.Fun.(*ast.Ident); ok {
+					child := GinkgoNode{}
+					child.SpecType = i.Name
+					parent := stack[len(stack)-1]
+					parent.Children = append(parent.Children, &child)
+
+					// push onto stack
+					stack = append(stack, &child)
+					return true
+				}
 			}
-			// Figuring out the "name" of each Spec is a pain, because the it's not necessarily a string literal...
-			// I could handle string literals, and error out on everything else, though.
 		}
+		// pop off stack
+		stack = stack[0 : len(stack)-1]
 		return true
 	})
 
-	// ast.Inspect(f, func(n ast.Node) bool {
-	// 	switch x := n.(type) {
-	// 	case *ast.CallExpr:
-	// 		switch c := x.Fun.(type) {
-	// 		case *ast.Ident:
-	// 			switch c.Name {
-	// 			case "It":
-	// 				fmt.Println(c.Pos())
-	// 				return false
-	// 			// TODO handle other ginkgo test expressions
-	// 			default:
-	// 				return true
-	// 			}
-	// 		default:
-	// 			return true
-	// 		}
-	// 	}
-	// 	return true
-	// })
+	fmt.Printf("%#v\n", stack)
+	fmt.Printf("%#v\n", root)
 
 }
