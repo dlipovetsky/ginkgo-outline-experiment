@@ -7,6 +7,7 @@ import (
 	"go/parser"
 	"go/token"
 	"log"
+	"strconv"
 
 	"golang.org/x/tools/go/ast/inspector"
 )
@@ -81,6 +82,18 @@ var _ = Describe("group 1", func() {
 							CodeLocation: fset.Position(i.Pos()).String(),
 						},
 					}
+					if len(c.Args) > 0 {
+						if text, ok := c.Args[0].(*ast.BasicLit); ok {
+							unquoted, err := strconv.Unquote(text.Value)
+							if err != nil {
+								panic(err)
+							}
+							child.Text = unquoted
+						}
+
+					}
+
+					// add to parent
 					parent := stack[len(stack)-1]
 					parent.Children = append(parent.Children, &child)
 
