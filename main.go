@@ -84,6 +84,7 @@ var _ = Describe("group 1", func() {
 						},
 					}
 					if len(c.Args) > 0 {
+						child.Text = "[could not determine]"
 						if text, ok := c.Args[0].(*ast.BasicLit); ok {
 							unquoted, err := strconv.Unquote(text.Value)
 							if err != nil {
