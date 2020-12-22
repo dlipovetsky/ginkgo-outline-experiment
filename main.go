@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -90,7 +91,9 @@ var _ = Describe("group 1", func() {
 		return true
 	})
 
-	fmt.Printf("%#v\n", stack)
-	fmt.Printf("%#v\n", root)
-
+	b, err := json.MarshalIndent(root, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(b))
 }
