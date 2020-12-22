@@ -54,8 +54,8 @@ var _ = Describe("group 1", func() {
 
 	type GinkgoMetadata struct {
 		SpecType     string
-		Text         string
 		CodeLocation string
+		Text         string
 	}
 
 	type GinkgoNode struct {
@@ -75,8 +75,12 @@ var _ = Describe("group 1", func() {
 		if push {
 			if c, ok := n.(*ast.CallExpr); ok {
 				if i, ok := c.Fun.(*ast.Ident); ok {
-					child := GinkgoNode{}
-					child.SpecType = i.Name
+					child := GinkgoNode{
+						GinkgoMetadata: GinkgoMetadata{
+							SpecType:     i.Name,
+							CodeLocation: fset.Position(i.Pos()).String(),
+						},
+					}
 					parent := stack[len(stack)-1]
 					parent.Children = append(parent.Children, &child)
 
