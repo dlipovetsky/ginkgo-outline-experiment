@@ -22,8 +22,9 @@ func main() {
 package p
 
 import (
+	"fmt"
+
 	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("group 1", func() {
