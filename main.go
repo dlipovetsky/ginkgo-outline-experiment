@@ -3,13 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"go/ast"
 	"go/parser"
 	"go/token"
 	"log"
-	"strconv"
 
-	"golang.org/x/tools/go/ast/inspector"
+	"daniel.lipovetsky.me/ginkgo-outline/outline"
 )
 
 func main() {
@@ -46,85 +44,28 @@ var _ = Describe("group 1", func() {
 
 	fset := token.NewFileSet()
 
-	var f *ast.File
-	var err error
-
-	f, err = parser.ParseFile(fset, filename, src, 0)
+	f, err := parser.ParseFile(fset, filename, src, 0)
 	if err != nil {
-		log.Fatalf("error: %s", err)
+		log.Fatalf("error parsing source: %s", err)
 	}
 
 	g, err := parser.ParseFile(fset, "src_2.go", src, 0)
 	if err != nil {
-		log.Fatalf("error: %s", err)
+		log.Fatalf("error parsing source: %s", err)
 	}
 
-	ispr := inspector.New([]*ast.File{f, g})
-
-	type GinkgoMetadata struct {
-		SpecType     string
-		CodeLocation string
-		Text         string
+	o, err := outline.FromASTFiles(fset, f, g)
+	if err != nil {
+		log.Fatalf("error building outline: %s", err)
 	}
 
-	type GinkgoNode struct {
-		GinkgoMetadata
-		Children []*GinkgoNode
-	}
-
-	root := GinkgoNode{
-		GinkgoMetadata: GinkgoMetadata{
-			SpecType: "root",
-		},
-	}
-
-	stack := []*GinkgoNode{&root}
-
-	ispr.Nodes([]ast.Node{(*ast.CallExpr)(nil)}, func(n ast.Node, push bool) bool {
-		if c, ok := n.(*ast.CallExpr); ok {
-			if i, ok := c.Fun.(*ast.Ident); ok {
-				// TODO return immediately if identifer is not a ginkgo spec/container
-				child := GinkgoNode{
-					GinkgoMetadata: GinkgoMetadata{
-						SpecType:     i.Name,
-						CodeLocation: fset.Position(i.Pos()).String(),
-					},
-				}
-				if len(c.Args) > 0 {
-					child.Text = "[could not determine]"
-					if text, ok := c.Args[0].(*ast.BasicLit); ok {
-						unquoted, err := strconv.Unquote(text.Value)
-						if err != nil {
-							panic(err)
-						}
-						child.Text = unquoted
-					}
-				}
-
-				if push {
-					// add to parent
-					parent := stack[len(stack)-1]
-					parent.Children = append(parent.Children, &child)
-
-					// push onto stack
-					stack = append(stack, &child)
-					return true
-				}
-				// pop off stack
-				stack = stack[0 : len(stack)-1]
-				return true
-			}
-		}
-		return true
-	})
-
-	fmt.Println("input:")
+	fmt.Println("sources:")
 	fmt.Print(src)
 
-	fmt.Println("output:")
-	b, err := json.MarshalIndent(root, "", "  ")
+	fmt.Println("outline:")
+	b, err := json.MarshalIndent(o, "", "  ")
 	if err != nil {
-		panic(err)
+		log.Fatalf("error marshalling outline to json: %s", err)
 	}
 	fmt.Println(string(b))
 }
