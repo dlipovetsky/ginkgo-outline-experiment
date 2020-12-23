@@ -54,7 +54,12 @@ var _ = Describe("group 1", func() {
 		log.Fatalf("error: %s", err)
 	}
 
-	ispr := inspector.New([]*ast.File{f})
+	g, err := parser.ParseFile(fset, "src_2.go", src, 0)
+	if err != nil {
+		log.Fatalf("error: %s", err)
+	}
+
+	ispr := inspector.New([]*ast.File{f, g})
 
 	type GinkgoMetadata struct {
 		SpecType     string
