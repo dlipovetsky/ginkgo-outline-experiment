@@ -18,8 +18,7 @@ func main() {
 	// }
 	// filename := os.Args[1]
 
-	src := `
-package p
+	src := `package p
 
 import (
 	"fmt"
@@ -114,6 +113,10 @@ var _ = Describe("group 1", func() {
 		return true
 	})
 
+	fmt.Println("input:")
+	fmt.Print(src)
+
+	fmt.Println("output:")
 	b, err := json.MarshalIndent(root, "", "  ")
 	if err != nil {
 		panic(err)
