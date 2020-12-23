@@ -10,7 +10,7 @@ import (
 )
 
 type GinkgoMetadata struct {
-	SpecType     string
+	Name         string
 	CodeLocation string
 	Text         string
 }
@@ -27,9 +27,7 @@ type Outline struct {
 func New() *Outline {
 	return &Outline{
 		root: &GinkgoNode{
-			GinkgoMetadata: GinkgoMetadata{
-				SpecType: "root",
-			},
+			GinkgoMetadata: GinkgoMetadata{},
 		},
 	}
 }
@@ -49,7 +47,7 @@ func FromASTFiles(fset *token.FileSet, src ...*ast.File) (*Outline, error) {
 				// TODO return immediately if identifer is not a ginkgo spec/container
 				child := GinkgoNode{
 					GinkgoMetadata: GinkgoMetadata{
-						SpecType:     i.Name,
+						Name:         i.Name,
 						CodeLocation: fset.Position(i.Pos()).String(),
 					},
 				}
