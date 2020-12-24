@@ -49,12 +49,17 @@ var _ = Describe("group 1", func() {
 		log.Fatalf("error parsing source: %s", err)
 	}
 
-	g, err := parser.ParseFile(fset, "src_2.go", src, 0)
-	if err != nil {
-		log.Fatalf("error parsing source: %s", err)
-	}
+	// g, err := parser.ParseFile(fset, "src_2.go", src, 0)
+	// if err != nil {
+	// 	log.Fatalf("error parsing source: %s", err)
+	// }
 
-	o, err := outline.FromASTFiles(fset, f, g)
+	// o, err := outline.FromASTFiles(fset, f, g)
+	// if err != nil {
+	// 	log.Fatalf("error building outline: %s", err)
+	// }
+
+	o, err := outline.FromASTFile(f, fset)
 	if err != nil {
 		log.Fatalf("error building outline: %s", err)
 	}
