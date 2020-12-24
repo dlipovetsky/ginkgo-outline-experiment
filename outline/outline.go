@@ -2,6 +2,7 @@ package outline
 
 import (
 	"encoding/json"
+	"fmt"
 	"go/ast"
 	"go/token"
 	"strconv"
@@ -44,39 +45,7 @@ func (o *Outline) MarshalJSON() ([]byte, error) {
 	return json.Marshal(o.root)
 }
 
-type GinkgoVisitor struct {
-	fset    *token.FileSet
-	astFile *ast.File
-	stack   []*GinkgoNode
-}
-
-func (v *GinkgoVisitor) Visit(node ast.Node) ast.Visitor {
-	if node == nil {
-		// pop off stack
-		v.stack = v.stack[0 : len(v.stack)-1]
-		return v
-	}
-
-	// process node
-	ce, ok := node.(*ast.CallExpr)
-	if !ok {
-		return v
-	}
-	n, ok := v.GinkgoNodeFromCallExpr(ce)
-	if !ok {
-		return v
-	}
-
-	// add to parent
-	parent := v.stack[len(v.stack)-1]
-	parent.Children = append(parent.Children, n)
-
-	// push onto stack
-	v.stack = append(v.stack, n)
-	return v
-}
-
-func (v *GinkgoVisitor) GinkgoNodeFromCallExpr(ce *ast.CallExpr) (*GinkgoNode, bool) {
+func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode, bool) {
 	id, ok := ce.Fun.(*ast.Ident)
 	if !ok {
 		return nil, false
@@ -84,7 +53,7 @@ func (v *GinkgoVisitor) GinkgoNodeFromCallExpr(ce *ast.CallExpr) (*GinkgoNode, b
 
 	n := GinkgoNode{}
 	n.Name = id.Name
-	n.CodeLocation = v.fset.Position(ce.Pos()).String()
+	n.CodeLocation = fset.Position(ce.Pos()).String()
 	switch id.Name {
 	case "It", "Measure", "Specify":
 		n.Spec = true
@@ -139,60 +108,35 @@ func TextFromCallExpr(ce *ast.CallExpr) (string, bool) {
 	return unquoted, true
 }
 
-func FromASTFile(astFile *ast.File, fset *token.FileSet) (*Outline, error) {
-	outline := Outline{
-		root: &GinkgoNode{},
-	}
-	visitor := &GinkgoVisitor{
-		astFile: astFile,
-		fset:    fset,
-		stack:   []*GinkgoNode{outline.root},
-	}
-	ast.Walk(visitor, visitor.astFile)
-	return &outline, nil
-}
-
 func FromASTFiles(fset *token.FileSet, src ...*ast.File) (*Outline, error) {
 	ispr := inspector.New(src)
 
-	o := New()
-	stack := []*GinkgoNode{o.root}
-	ispr.Nodes([]ast.Node{(*ast.CallExpr)(nil)}, func(n ast.Node, push bool) bool {
-		if c, ok := n.(*ast.CallExpr); ok {
-			if i, ok := c.Fun.(*ast.Ident); ok {
-				// TODO return immediately if identifer is not a ginkgo spec/container
-				child := GinkgoNode{
-					GinkgoMetadata: GinkgoMetadata{
-						Name:         i.Name,
-						CodeLocation: fset.Position(i.Pos()).String(),
-					},
-				}
-				if len(c.Args) > 0 {
-					if text, ok := c.Args[0].(*ast.BasicLit); ok {
-						// TODO: inspect text.Kind, maybe use UnquoteChar() as well?
-						unquoted, err := strconv.Unquote(text.Value)
-						if err != nil {
-							panic(err)
-						}
-						child.Text = unquoted
-					}
-				}
-
-				if push {
-					// add to parent
-					parent := stack[len(stack)-1]
-					parent.Children = append(parent.Children, &child)
-
-					// push onto stack
-					stack = append(stack, &child)
-					return true
-				}
-				// pop off stack
-				stack = stack[0 : len(stack)-1]
-				return true
-			}
+	outline := Outline{
+		root: &GinkgoNode{},
+	}
+	stack := []*GinkgoNode{outline.root}
+	ispr.Nodes([]ast.Node{(*ast.CallExpr)(nil)}, func(node ast.Node, push bool) bool {
+		ce, ok := node.(*ast.CallExpr)
+		if !ok {
+			panic(fmt.Errorf("node is not an *ast.CallExpr: %s", fset.Position(node.Pos())))
 		}
+		gn, ok := GinkgoNodeFromCallExpr(ce, fset)
+		if !ok {
+			// Not a Ginkgo call, continue
+			return true
+		}
+
+		// Visiting this node on the way down
+		if push {
+			parent := stack[len(stack)-1]
+			parent.Children = append(parent.Children, gn)
+
+			stack = append(stack, gn)
+			return true
+		}
+		// Visiting node on the way up
+		stack = stack[0 : len(stack)-1]
 		return true
 	})
-	return o, nil
+	return &outline, nil
 }
