@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Describe",
+    "position": "testdata/normal_test.go:8:9",
+    "text": "NormalFixture",
+    "spec": false,
+    "focused": false,
+    "pending": false,
+    "nodes": [
+      {
+        "name": "Describe",
+        "position": "testdata/normal_test.go:9:2",
+        "text": "normal",
+        "spec": false,
+        "focused": false,
+        "pending": false,
+        "nodes": [
+          {
+            "name": "It",
+            "position": "testdata/normal_test.go:10:3",
+            "text": "normal",
+            "spec": true,
+            "focused": false,
+            "pending": false
+          }
+        ]
+      },
+      {
+        "name": "Context",
+        "position": "testdata/normal_test.go:15:2",
+        "text": "normal",
+        "spec": false,
+        "focused": false,
+        "pending": false,
+        "nodes": [
+          {
+            "name": "It",
+            "position": "testdata/normal_test.go:16:3",
+            "text": "normal",
+            "spec": true,
+            "focused": false,
+            "pending": false
+          }
+        ]
+      },
+      {
+        "name": "When",
+        "position": "testdata/normal_test.go:21:2",
+        "text": "normal",
+        "spec": false,
+        "focused": false,
+        "pending": false,
+        "nodes": [
+          {
+            "name": "It",
+            "position": "testdata/normal_test.go:22:3",
+            "text": "normal",
+            "spec": true,
+            "focused": false,
+            "pending": false
+          }
+        ]
+      },
+      {
+        "name": "It",
+        "position": "testdata/normal_test.go:27:2",
+        "text": "normal",
+        "spec": true,
+        "focused": false,
+        "pending": false
+      },
+      {
+        "name": "Specify",
+        "position": "testdata/normal_test.go:31:2",
+        "text": "normal",
+        "spec": true,
+        "focused": false,
+        "pending": false
+      },
+      {
+        "name": "Measure",
+        "position": "testdata/normal_test.go:35:2",
+        "text": "normal",
+        "spec": true,
+        "focused": false,
+        "pending": false
+      }
+    ]
+  }
+]

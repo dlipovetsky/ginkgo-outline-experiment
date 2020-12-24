@@ -18,6 +18,10 @@ func TestFromASTFile(t *testing.T) {
 		outlineFile string
 	}{
 		{
+			srcFile:     "normal_test.go",
+			outlineFile: "normal_test_outline.json",
+		},
+		{
 			srcFile:     "focused_test.go",
 			outlineFile: "focused_test_outline.json",
 		},
