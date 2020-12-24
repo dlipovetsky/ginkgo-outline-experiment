@@ -123,6 +123,10 @@ func FromASTFiles(fset *token.FileSet, src ...*ast.File) (*Outline, error) {
 			if parent.Pending {
 				gn.Pending = true
 			}
+			// TODO: Update focused based on ginkgo behavior:
+			// > Nested programmatically focused specs follow a simple rule: if
+			// > a leaf-node is marked focused, any of its ancestor nodes that
+			// > are marked focus will be unfocused.
 			parent.Children = append(parent.Children, gn)
 
 			stack = append(stack, gn)
