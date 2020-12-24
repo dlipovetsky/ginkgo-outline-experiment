@@ -102,10 +102,10 @@ func TextFromCallExpr(ce *ast.CallExpr) (string, bool) {
 func FromASTFile(fset *token.FileSet, src *ast.File) (*Outline, error) {
 	ispr := inspector.New([]*ast.File{src})
 
-	outline := Outline{
-		root: &GinkgoNode{},
+	root := GinkgoNode{
+		Nodes: []*GinkgoNode{},
 	}
-	stack := []*GinkgoNode{outline.root}
+	stack := []*GinkgoNode{&root}
 	ispr.Nodes([]ast.Node{(*ast.CallExpr)(nil)}, func(node ast.Node, push bool) bool {
 		ce, ok := node.(*ast.CallExpr)
 		if !ok {
@@ -136,16 +136,16 @@ func FromASTFile(fset *token.FileSet, src *ast.File) (*Outline, error) {
 		stack = stack[0 : len(stack)-1]
 		return true
 	})
-	return &outline, nil
+
+	return &Outline{
+		nodes: root.Nodes,
+	}, nil
 }
 
 type Outline struct {
-	root *GinkgoNode
+	nodes []*GinkgoNode
 }
 
 func (o *Outline) MarshalJSON() ([]byte, error) {
-	if o.root != nil {
-		return json.Marshal(o.root.Nodes)
-	}
-	return nil, nil
+	return json.Marshal(o.nodes)
 }
