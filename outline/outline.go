@@ -29,22 +29,6 @@ type GinkgoNode struct {
 	Children []*GinkgoNode
 }
 
-type Outline struct {
-	root *GinkgoNode
-}
-
-func New() *Outline {
-	return &Outline{
-		root: &GinkgoNode{
-			GinkgoMetadata: GinkgoMetadata{},
-		},
-	}
-}
-
-func (o *Outline) MarshalJSON() ([]byte, error) {
-	return json.Marshal(o.root)
-}
-
 func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode, bool) {
 	id, ok := ce.Fun.(*ast.Ident)
 	if !ok {
@@ -101,11 +85,18 @@ func TextFromCallExpr(ce *ast.CallExpr) (string, bool) {
 	if !ok {
 		return "", false
 	}
-	unquoted, err := strconv.Unquote(text.Value)
-	if err != nil {
+	switch text.Kind {
+	case token.CHAR, token.STRING:
+		// For token.CHAR and token.STRING, Value is quoted
+		unquoted, err := strconv.Unquote(text.Value)
+		if err != nil {
+			// If unquoting fails, just use the raw Value
+			return text.Value, true
+		}
+		return unquoted, true
+	default:
 		return text.Value, true
 	}
-	return unquoted, true
 }
 
 func FromASTFiles(fset *token.FileSet, src ...*ast.File) (*Outline, error) {
@@ -139,4 +130,12 @@ func FromASTFiles(fset *token.FileSet, src ...*ast.File) (*Outline, error) {
 		return true
 	})
 	return &outline, nil
+}
+
+type Outline struct {
+	root *GinkgoNode
+}
+
+func (o *Outline) MarshalJSON() ([]byte, error) {
+	return json.Marshal(o.root.Children)
 }
