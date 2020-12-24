@@ -120,6 +120,9 @@ func FromASTFiles(fset *token.FileSet, src ...*ast.File) (*Outline, error) {
 		// Visiting this node on the way down
 		if push {
 			parent := stack[len(stack)-1]
+			if parent.Pending {
+				gn.Pending = true
+			}
 			parent.Children = append(parent.Children, gn)
 
 			stack = append(stack, gn)

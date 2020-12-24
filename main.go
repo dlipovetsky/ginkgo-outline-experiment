@@ -31,7 +31,7 @@ var _ = Describe("group 1", func() {
 		It("should test 1.2", func() {
 		})
 	})
-	Context("context 2", func() {
+	PContext("context 2", func() {
 		It("should test 2.1", func() {
 		})
 		It(fmt.Sprintf("should test %d.%d", 2, 2), func() {
