@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Describe",
+    "codeLocation": "testdata/focused_test.go:8:9",
+    "text": "FocusedFixture",
+    "spec": false,
+    "focused": false,
+    "pending": false,
+    "children": [
+      {
+        "name": "FDescribe",
+        "codeLocation": "testdata/focused_test.go:9:2",
+        "text": "focused",
+        "spec": false,
+        "focused": true,
+        "pending": false,
+        "children": [
+          {
+            "name": "It",
+            "codeLocation": "testdata/focused_test.go:10:3",
+            "text": "focused",
+            "spec": true,
+            "focused": false,
+            "pending": false
+          }
+        ]
+      },
+      {
+        "name": "FContext",
+        "codeLocation": "testdata/focused_test.go:15:2",
+        "text": "focused",
+        "spec": false,
+        "focused": true,
+        "pending": false,
+        "children": [
+          {
+            "name": "It",
+            "codeLocation": "testdata/focused_test.go:16:3",
+            "text": "focused",
+            "spec": true,
+            "focused": false,
+            "pending": false
+          }
+        ]
+      },
+      {
+        "name": "FWhen",
+        "codeLocation": "testdata/focused_test.go:21:2",
+        "text": "focused",
+        "spec": false,
+        "focused": true,
+        "pending": false,
+        "children": [
+          {
+            "name": "It",
+            "codeLocation": "testdata/focused_test.go:22:3",
+            "text": "focused",
+            "spec": true,
+            "focused": false,
+            "pending": false
+          }
+        ]
+      },
+      {
+        "name": "FIt",
+        "codeLocation": "testdata/focused_test.go:27:2",
+        "text": "focused",
+        "spec": true,
+        "focused": true,
+        "pending": false
+      },
+      {
+        "name": "FSpecify",
+        "codeLocation": "testdata/focused_test.go:31:2",
+        "text": "focused",
+        "spec": true,
+        "focused": true,
+        "pending": false
+      },
+      {
+        "name": "FMeasure",
+        "codeLocation": "testdata/focused_test.go:35:2",
+        "text": "focused",
+        "spec": true,
+        "focused": true,
+        "pending": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Describe",
+    "codeLocation": "testdata/pending_test.go:8:9",
+    "text": "PendingFixture",
+    "spec": false,
+    "focused": false,
+    "pending": false,
+    "children": [
+      {
+        "name": "PDescribe",
+        "codeLocation": "testdata/pending_test.go:9:2",
+        "text": "pending",
+        "spec": false,
+        "focused": false,
+        "pending": true,
+        "children": [
+          {
+            "name": "It",
+            "codeLocation": "testdata/pending_test.go:10:3",
+            "text": "pending",
+            "spec": true,
+            "focused": false,
+            "pending": true
+          }
+        ]
+      },
+      {
+        "name": "PContext",
+        "codeLocation": "testdata/pending_test.go:15:2",
+        "text": "pending",
+        "spec": false,
+        "focused": false,
+        "pending": true,
+        "children": [
+          {
+            "name": "It",
+            "codeLocation": "testdata/pending_test.go:16:3",
+            "text": "pending",
+            "spec": true,
+            "focused": false,
+            "pending": true
+          }
+        ]
+      },
+      {
+        "name": "PWhen",
+        "codeLocation": "testdata/pending_test.go:21:2",
+        "text": "pending",
+        "spec": false,
+        "focused": false,
+        "pending": true,
+        "children": [
+          {
+            "name": "It",
+            "codeLocation": "testdata/pending_test.go:22:3",
+            "text": "pending",
+            "spec": true,
+            "focused": false,
+            "pending": true
+          }
+        ]
+      },
+      {
+        "name": "PIt",
+        "codeLocation": "testdata/pending_test.go:27:2",
+        "text": "pending",
+        "spec": true,
+        "focused": false,
+        "pending": true
+      },
+      {
+        "name": "PSpecify",
+        "codeLocation": "testdata/pending_test.go:31:2",
+        "text": "pending",
+        "spec": true,
+        "focused": false,
+        "pending": true
+      },
+      {
+        "name": "PMeasure",
+        "codeLocation": "testdata/pending_test.go:35:2",
+        "text": "pending",
+        "spec": true,
+        "focused": false,
+        "pending": true
+      }
+    ]
+  }
+]
