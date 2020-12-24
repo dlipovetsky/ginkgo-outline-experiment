@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	UndefinedAltText = "undefined"
+	UndefinedTextAlt = "undefined"
 )
 
 type GinkgoMetadata struct {
@@ -57,23 +57,23 @@ func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode,
 	switch id.Name {
 	case "It", "Measure", "Specify":
 		n.Spec = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedAltText)
+		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "FIt", "FMeasure", "FSpecify":
 		n.Spec = true
 		n.Focused = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedAltText)
+		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "PIt", "PMeasure", "PSpecify", "XIt", "XMeasure", "XSpecify":
 		n.Spec = true
 		n.Pending = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedAltText)
+		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "Context", "Describe", "When":
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedAltText)
+		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "FContext", "FDescribe", "FWhen":
 		n.Focused = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedAltText)
+		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "PContext", "PDescribe", "PWhen", "XContext", "XDescribe", "XWhen":
 		n.Pending = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedAltText)
+		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "By":
 	case "AfterEach", "BeforeEach":
 	case "JustAfterEach", "JustBeforeEach":
