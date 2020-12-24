@@ -99,8 +99,8 @@ func TextFromCallExpr(ce *ast.CallExpr) (string, bool) {
 	}
 }
 
-func FromASTFiles(fset *token.FileSet, src ...*ast.File) (*Outline, error) {
-	ispr := inspector.New(src)
+func FromASTFile(fset *token.FileSet, src *ast.File) (*Outline, error) {
+	ispr := inspector.New([]*ast.File{src})
 
 	outline := Outline{
 		root: &GinkgoNode{},
