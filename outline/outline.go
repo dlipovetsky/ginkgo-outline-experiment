@@ -144,5 +144,8 @@ type Outline struct {
 }
 
 func (o *Outline) MarshalJSON() ([]byte, error) {
-	return json.Marshal(o.root.Children)
+	if o.root != nil {
+		return json.Marshal(o.root.Children)
+	}
+	return nil, nil
 }
