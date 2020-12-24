@@ -29,9 +29,13 @@ func main() {
 		log.Fatalf("error building outline: %s", err)
 	}
 
+	fmt.Println("json:")
 	b, err := json.MarshalIndent(o, "", "  ")
 	if err != nil {
 		log.Fatalf("error marshalling outline to json: %s", err)
 	}
 	fmt.Println(string(b))
+
+	fmt.Println("flat:")
+	fmt.Print(o)
 }

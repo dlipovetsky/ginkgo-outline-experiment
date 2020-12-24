@@ -6,6 +6,7 @@ import (
 	"go/ast"
 	"go/token"
 	"strconv"
+	"strings"
 
 	"golang.org/x/tools/go/ast/inspector"
 )
@@ -27,6 +28,15 @@ type GinkgoMetadata struct {
 type GinkgoNode struct {
 	GinkgoMetadata
 	Nodes []*GinkgoNode `json:"nodes,omitempty"`
+}
+
+type WalkFunc func(n *GinkgoNode)
+
+func (n *GinkgoNode) Walk(f WalkFunc) {
+	f(n)
+	for _, m := range n.Nodes {
+		m.Walk(f)
+	}
 }
 
 func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode, bool) {
@@ -148,4 +158,15 @@ type Outline struct {
 
 func (o *Outline) MarshalJSON() ([]byte, error) {
 	return json.Marshal(o.nodes)
+}
+
+func (o *Outline) String() string {
+	var b strings.Builder
+	f := func(n *GinkgoNode) {
+		b.WriteString(fmt.Sprintf("%s:%s:%s\n", n.Name, n.Text, n.Position))
+	}
+	for _, n := range o.nodes {
+		n.Walk(f)
+	}
+	return b.String()
 }
