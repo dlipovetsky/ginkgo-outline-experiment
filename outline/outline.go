@@ -15,18 +15,18 @@ const (
 )
 
 type GinkgoMetadata struct {
-	Name         string
-	CodeLocation string
-	Text         string
+	Name         string `json:"name"`
+	CodeLocation string `json:"codeLocation"`
+	Text         string `json:"text"`
 
-	Spec    bool
-	Focused bool
-	Pending bool
+	Spec    bool `json:"spec"`
+	Focused bool `json:"focused"`
+	Pending bool `json:"pending"`
 }
 
 type GinkgoNode struct {
 	GinkgoMetadata
-	Children []*GinkgoNode
+	Children []*GinkgoNode `json:"children,omitempty"`
 }
 
 func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode, bool) {
