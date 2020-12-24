@@ -15,9 +15,9 @@ const (
 )
 
 type GinkgoMetadata struct {
-	Name         string `json:"name"`
-	CodeLocation string `json:"codeLocation"`
-	Text         string `json:"text"`
+	Name     string `json:"name"`
+	Position string `json:"position"`
+	Text     string `json:"text"`
 
 	Spec    bool `json:"spec"`
 	Focused bool `json:"focused"`
@@ -26,7 +26,7 @@ type GinkgoMetadata struct {
 
 type GinkgoNode struct {
 	GinkgoMetadata
-	Children []*GinkgoNode `json:"children,omitempty"`
+	Nodes []*GinkgoNode `json:"nodes,omitempty"`
 }
 
 func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode, bool) {
@@ -37,7 +37,7 @@ func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode,
 
 	n := GinkgoNode{}
 	n.Name = id.Name
-	n.CodeLocation = fset.Position(ce.Pos()).String()
+	n.Position = fset.Position(ce.Pos()).String()
 	switch id.Name {
 	case "It", "Measure", "Specify":
 		n.Spec = true
@@ -127,7 +127,7 @@ func FromASTFile(fset *token.FileSet, src *ast.File) (*Outline, error) {
 			// > Nested programmatically focused specs follow a simple rule: if
 			// > a leaf-node is marked focused, any of its ancestor nodes that
 			// > are marked focus will be unfocused.
-			parent.Children = append(parent.Children, gn)
+			parent.Nodes = append(parent.Nodes, gn)
 
 			stack = append(stack, gn)
 			return true
@@ -145,7 +145,7 @@ type Outline struct {
 
 func (o *Outline) MarshalJSON() ([]byte, error) {
 	if o.root != nil {
-		return json.Marshal(o.root.Children)
+		return json.Marshal(o.root.Nodes)
 	}
 	return nil, nil
 }

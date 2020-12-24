@@ -1,23 +1,23 @@
 [
   {
     "name": "Describe",
-    "codeLocation": "testdata/focused_test.go:8:9",
+    "position": "testdata/focused_test.go:8:9",
     "text": "FocusedFixture",
     "spec": false,
     "focused": false,
     "pending": false,
-    "children": [
+    "nodes": [
       {
         "name": "FDescribe",
-        "codeLocation": "testdata/focused_test.go:9:2",
+        "position": "testdata/focused_test.go:9:2",
         "text": "focused",
         "spec": false,
         "focused": true,
         "pending": false,
-        "children": [
+        "nodes": [
           {
             "name": "It",
-            "codeLocation": "testdata/focused_test.go:10:3",
+            "position": "testdata/focused_test.go:10:3",
             "text": "focused",
             "spec": true,
             "focused": false,
@@ -27,15 +27,15 @@
       },
       {
         "name": "FContext",
-        "codeLocation": "testdata/focused_test.go:15:2",
+        "position": "testdata/focused_test.go:15:2",
         "text": "focused",
         "spec": false,
         "focused": true,
         "pending": false,
-        "children": [
+        "nodes": [
           {
             "name": "It",
-            "codeLocation": "testdata/focused_test.go:16:3",
+            "position": "testdata/focused_test.go:16:3",
             "text": "focused",
             "spec": true,
             "focused": false,
@@ -45,15 +45,15 @@
       },
       {
         "name": "FWhen",
-        "codeLocation": "testdata/focused_test.go:21:2",
+        "position": "testdata/focused_test.go:21:2",
         "text": "focused",
         "spec": false,
         "focused": true,
         "pending": false,
-        "children": [
+        "nodes": [
           {
             "name": "It",
-            "codeLocation": "testdata/focused_test.go:22:3",
+            "position": "testdata/focused_test.go:22:3",
             "text": "focused",
             "spec": true,
             "focused": false,
@@ -63,7 +63,7 @@
       },
       {
         "name": "FIt",
-        "codeLocation": "testdata/focused_test.go:27:2",
+        "position": "testdata/focused_test.go:27:2",
         "text": "focused",
         "spec": true,
         "focused": true,
@@ -71,7 +71,7 @@
       },
       {
         "name": "FSpecify",
-        "codeLocation": "testdata/focused_test.go:31:2",
+        "position": "testdata/focused_test.go:31:2",
         "text": "focused",
         "spec": true,
         "focused": true,
@@ -79,7 +79,7 @@
       },
       {
         "name": "FMeasure",
-        "codeLocation": "testdata/focused_test.go:35:2",
+        "position": "testdata/focused_test.go:35:2",
         "text": "focused",
         "spec": true,
         "focused": true,
