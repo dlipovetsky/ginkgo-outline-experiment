@@ -21,6 +21,15 @@ func TestFromASTFile(t *testing.T) {
 			srcFile:     "normal_test.go",
 			outlineFile: "normal_test_outline.json",
 		},
+		// TODO: enable tests
+		// {
+		// 	srcFile:     "nodot_test.go",
+		// 	outlineFile: "normal_test_outline.json",
+		// },
+		// {
+		// 	srcFile:     "alias_test.go",
+		// 	outlineFile: "normal_test_outline.json",
+		// },
 		{
 			srcFile:     "focused_test.go",
 			outlineFile: "focused_test_outline.json",
