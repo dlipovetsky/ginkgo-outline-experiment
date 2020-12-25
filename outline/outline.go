@@ -51,23 +51,23 @@ func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode,
 	switch id.Name {
 	case "It", "Measure", "Specify":
 		n.Spec = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
+		n.Text = TextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "FIt", "FMeasure", "FSpecify":
 		n.Spec = true
 		n.Focused = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
+		n.Text = TextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "PIt", "PMeasure", "PSpecify", "XIt", "XMeasure", "XSpecify":
 		n.Spec = true
 		n.Pending = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
+		n.Text = TextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "Context", "Describe", "When":
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
+		n.Text = TextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "FContext", "FDescribe", "FWhen":
 		n.Focused = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
+		n.Text = TextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "PContext", "PDescribe", "PWhen", "XContext", "XDescribe", "XWhen":
 		n.Pending = true
-		n.Text = GinkgoTextOrAltFromCallExpr(ce, UndefinedTextAlt)
+		n.Text = TextOrAltFromCallExpr(ce, UndefinedTextAlt)
 	case "By":
 	case "AfterEach", "BeforeEach":
 	case "JustAfterEach", "JustBeforeEach":
@@ -79,7 +79,7 @@ func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode,
 	return &n, true
 }
 
-func GinkgoTextOrAltFromCallExpr(ce *ast.CallExpr, alt string) string {
+func TextOrAltFromCallExpr(ce *ast.CallExpr, alt string) string {
 	text, defined := TextFromCallExpr(ce)
 	if !defined {
 		return alt
