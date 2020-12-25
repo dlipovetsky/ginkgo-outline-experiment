@@ -48,6 +48,8 @@ func GinkgoNodeFromCallExpr(ce *ast.CallExpr, fset *token.FileSet) (*GinkgoNode,
 	n := GinkgoNode{}
 	n.Name = id.Name
 	n.Position = fset.Position(ce.Pos()).String()
+	// TODO: Handle nodot and alias imports of the ginkgo package.
+	// The below assumes dot imports .
 	switch id.Name {
 	case "It", "Measure", "Specify":
 		n.Spec = true
