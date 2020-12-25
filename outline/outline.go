@@ -110,12 +110,12 @@ func TextFromCallExpr(ce *ast.CallExpr) (string, bool) {
 }
 
 func FromASTFile(fset *token.FileSet, src *ast.File) (*Outline, error) {
-	ispr := inspector.New([]*ast.File{src})
-
 	root := GinkgoNode{
 		Nodes: []*GinkgoNode{},
 	}
 	stack := []*GinkgoNode{&root}
+
+	ispr := inspector.New([]*ast.File{src})
 	ispr.Nodes([]ast.Node{(*ast.CallExpr)(nil)}, func(node ast.Node, push bool) bool {
 		ce, ok := node.(*ast.CallExpr)
 		if !ok {
