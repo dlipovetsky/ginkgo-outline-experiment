@@ -36,6 +36,6 @@ func main() {
 	}
 	fmt.Println(string(b))
 
-	fmt.Println("flat:")
+	fmt.Println("csv:")
 	fmt.Print(o)
 }

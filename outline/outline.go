@@ -163,7 +163,7 @@ func (o *Outline) MarshalJSON() ([]byte, error) {
 func (o *Outline) String() string {
 	var b strings.Builder
 	f := func(n *GinkgoNode) {
-		b.WriteString(fmt.Sprintf("%s:%s:%s\n", n.Name, n.Text, n.Position))
+		b.WriteString(fmt.Sprintf("%s,%s,%s\n", n.Name, n.Text, n.Position))
 	}
 	for _, n := range o.nodes {
 		n.Walk(f)
