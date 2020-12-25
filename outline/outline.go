@@ -148,16 +148,16 @@ func FromASTFile(fset *token.FileSet, src *ast.File) (*Outline, error) {
 	})
 
 	return &Outline{
-		nodes: root.Nodes,
+		outerNodes: root.Nodes,
 	}, nil
 }
 
 type Outline struct {
-	nodes []*GinkgoNode
+	outerNodes []*GinkgoNode
 }
 
 func (o *Outline) MarshalJSON() ([]byte, error) {
-	return json.Marshal(o.nodes)
+	return json.Marshal(o.outerNodes)
 }
 
 func (o *Outline) String() string {
@@ -165,7 +165,7 @@ func (o *Outline) String() string {
 	f := func(n *GinkgoNode) {
 		b.WriteString(fmt.Sprintf("%s,%s,%s\n", n.Name, n.Text, n.Position))
 	}
-	for _, n := range o.nodes {
+	for _, n := range o.outerNodes {
 		n.Walk(f)
 	}
 	return b.String()
