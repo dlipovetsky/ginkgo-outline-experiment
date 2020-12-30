@@ -1,4 +1,4 @@
-module daniel.lipovetsky.me/ginkgo-outline
+module daniel.lipovetsky.me/ginkgo-outline-experiment
 
 go 1.13
 

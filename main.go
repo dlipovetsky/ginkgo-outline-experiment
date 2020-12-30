@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	"daniel.lipovetsky.me/ginkgo-outline/outline"
+	"daniel.lipovetsky.me/ginkgo-outline-experiment/outline"
 )
 
 func main() {
